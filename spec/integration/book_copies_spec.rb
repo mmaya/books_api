@@ -26,27 +26,29 @@ RSpec.describe 'book copies', type: :request do
             average_rating: { type: :string },
             authors: { type: :array },
           },
-          required: [ 'isbn', 'title', 'description' ],
-          example: [
+          description: "List all book copies",
+          example:
+          [
             {
-              "id": 1,
-              "title": "The Little Prince",
+              "id": "1563cd76-e68f-4b38-8e6a-0a502692c5f0",
+              "user_description": "",
+              "is_new": "",
+              "price": "",
+              "title": "MALALA, A MENINA QUE QUERIA IR PARA A ESCOLA",
               "subtitle": "",
-              "page_count": "128",
-              "publisher": "Samaira Book Publishers",
+              "page_count": "96",
+              "publisher": "",
               "edition": "",
-              "published_date": "2017-11-04",
-              "language": "en",
-              "description": "",
-              "info_url": "https://play.google.com/store/books/details?id=6948DwAAQBAJ&source=gbs_api",
-              "average_rating": "5",
+              "published_date": "2015-04-30",
+              "language": "pt",
+              "description": "No primeiro livro-reportagem destinado ao público infantil, a jornalista Adriana Carranca relata às crianças a história da adolescente paquistanesa Malala Yousafzai, baleada por membros do Talibã aos catorze anos por defender a educação feminina. Na obra, a repórter traz suas percepções sobre o vale do Swat, a história da região e a definição dos termos mais importantes para entender a vida desta menina tão corajosa.",
+              "info_url": "http://books.google.com.br/books?id=LqlHvgAACAAJ&dq=isbn+8574066702&hl=&source=gbs_api",
+              "average_rating": "",
               "authors": [
-                "Antoine de Saint-Exupéry",
-                "SBP Editors"
+                "ADRIANA CARRANCA CORRÊA"
               ],
-              "isbn": "8193540190",
-              "created_at": "2021-04-01T19:55:55.291Z",
-              "updated_at": "2021-04-01T19:55:55.291Z"
+              "isbn": "8574066702",
+              "cover_image_url": "https://book-images-dev.s3.sa-east-1.amazonaws.com/rh2cgf9ir1zdti0x7m1461kv58cz?response-content-disposition=inline%3B%20filename%3D%2271fcsbZKaGL._AC_UL200_SR200%252C200_.jpg%22%3B%20filename%2A%3DUTF-8%27%2771fcsbZKaGL._AC_UL200_SR200%252C200_.jpg&response-content-type=image%2Fjpeg&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4QSR7Y5ZGYR5A65J%2F20210402%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210402T192046Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=bc90ab95e1110571366f1be0882e2360b375043d8b712fe5ca195835873808a4"
             }
           ]
         run_test!
@@ -59,32 +61,40 @@ RSpec.describe 'book copies', type: :request do
       
       response(201, 'successful') do
         consumes 'multipart/form-data'
-        parameter name: :cover_image, :in => :formData, :type => :file, required: true
-        parameter name: :isbn, :in => :formData, :type => :string, required: true
-        
+        parameter name: :cover_image, in: :formData, type: :file, required: true
+        parameter name: :isbn, in: :formData, type: :string, required: true, example: "8574066702"
+        parameter name: :price, in: :formData, type: :number, required: true, example: "100.00"
+        parameter name: :user_description, in: :formData, type: :string, required: false, example: "The book copy is in excellent state, it looks like new!"
+        parameter name: :is_new, in: :formData, type: :boolean, required: false, default: false, example: "false"
         schema type: :object,
+        description: "Creates a book copy for sale. It consumes the Google Book API if the books still don't exist on the local database. The book cover image, uploaded by the user, is hosted on AWS S3.",
         properties: {
           isbn: {type: :string},
           price: {type: :float},
           is_new: {type: :boolean},
           cover_image: {type: :file}
         },
-        required: [ 'isbn', 'title', 'description' ],
+        required: [ 'isbn', 'price' ],
           example: {
-            isbn: "89885545",
-            title: "O Pequeno Príncipe",
-            subtitle: "",
-            page_count: "232",
-            publisher: "Editora Aurora",
-            edition: "10ª edição",
-            published_date: "2020-09-02",
-            language: "Português",
-            small_thumbnail_url: "",
-            thumbnail_url: "",
-            description: '"O essencial é invisível aos olhos ..." O Pequeno Príncipe é uma das obras literárias mais lidas no mundo e isto se deve à sua capacidade de relevar, a cada pessoa, significados diferentes, profundos, diante de uma história aparentemente simples. Nesta nova edição, você terá a chance de revisitar asteroides, planetas e baobás, encontrar uma certa raposa e admirar uma rosa muito especial. Escrito há mais de 70 anos, este livro é um dos favoritos de todos os apaixonados por literatura. E, até quem não tem hábito de leitura, se encanta pela doçura do pequeno príncipe. Ilustrado com as aquarelas do autor, a obra narra a amizade entre um piloto perdido no deserto e seu amigo inesperado, o pequeno príncipe. Seja esta a sua primeira leitura ou já perdeu as contas de quantas vezes leu a história: prepare-se para se emocionar.',
-            info_url: "http://books.google.com.br/books?id=Hx_PzQEACAAJ&dq=isbn+658604104X&hl=&source=gbs_api",
-            average_rating: "5.0",
-            authors: ["Antoine De Saint - Exupéry"],
+            "id": "1563cd76-e68f-4b38-8e6a-0a502692c5f0",
+            "user_description": "",
+            "is_new": "",
+            "price": "",
+            "title": "MALALA, A MENINA QUE QUERIA IR PARA A ESCOLA",
+            "subtitle": "",
+            "page_count": "96",
+            "publisher": "",
+            "edition": "",
+            "published_date": "2015-04-30",
+            "language": "pt",
+            "description": "No primeiro livro-reportagem destinado ao público infantil, a jornalista Adriana Carranca relata às crianças a história da adolescente paquistanesa Malala Yousafzai, baleada por membros do Talibã aos catorze anos por defender a educação feminina. Na obra, a repórter traz suas percepções sobre o vale do Swat, a história da região e a definição dos termos mais importantes para entender a vida desta menina tão corajosa.",
+            "info_url": "http://books.google.com.br/books?id=LqlHvgAACAAJ&dq=isbn+8574066702&hl=&source=gbs_api",
+            "average_rating": "",
+            "authors": [
+              "ADRIANA CARRANCA CORRÊA"
+            ],
+            "isbn": "8574066702",
+            "cover_image_url": "https://book-images-dev.s3.sa-east-1.amazonaws.com/rh2cgf9ir1zdti0x7m1461kv58cz?response-content-disposition=inline%3B%20filename%3D%2271fcsbZKaGL._AC_UL200_SR200%252C200_.jpg%22%3B%20filename%2A%3DUTF-8%27%2771fcsbZKaGL._AC_UL200_SR200%252C200_.jpg&response-content-type=image%2Fjpeg&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4QSR7Y5ZGYR5A65J%2F20210402%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210402T192046Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=bc90ab95e1110571366f1be0882e2360b375043d8b712fe5ca195835873808a4"
           }
         run_test!
       end
