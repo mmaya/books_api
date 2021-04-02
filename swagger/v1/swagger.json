@@ -127,7 +127,7 @@
             "name": "user_description",
             "in": "formData",
             "type": "string",
-            "required": true,
+            "required": false,
             "example": "The book copy is in excellent state, it looks like new!"
           },
           {
