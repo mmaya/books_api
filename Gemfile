@@ -26,12 +26,12 @@ gem "figaro"
 gem 'rack-cors'
 gem 'rest-client'
 gem 'rswag'
+gem 'rspec'
+gem 'rspec-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec'
-  gem 'rspec-rails', '~> 4.0.2'
 end
 
 group :development do
