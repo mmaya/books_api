@@ -11,9 +11,7 @@ class GbooksIsbnService
   
   def search
     book_data = GoogleBooksApi::BaseAdapter.searchISBN(@isbn)
-    puts '--------------'
-    puts book_data
-    puts '--------------'
+
     if book_data && book_data[:title] && book_data[:isbn] && book_data[:authors]
       book_data
     else

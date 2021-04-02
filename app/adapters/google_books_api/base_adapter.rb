@@ -6,13 +6,13 @@ module GoogleBooksApi
       self.base_url = ENV.fetch("GOOGLE_BOOKS_API_URL")
 
     def self.searchISBN(isbn)
-      url = "#{self.base_url}?q=isbn+#{isbn}&key=#{Rails.application.credentials[Rails.env.to_sym][:google_books]}"
-
+      url = "#{self.base_url}?q=isbn+#{isbn}&key=#{Rails.application.credentials[:google_books]}"
       response = self.request = RestClient.get url 
 
       if response.code == 200
         parsed = JSON.parse(response)
-        if parsed["items"] && parsed["items"].kind_of?(Array) && parsed["items"].length == 1
+
+        if parsed["items"] && parsed["items"].kind_of?(Array) && parsed["items"].length > 0
           book_data = {
             isbn: isbn,
             title: parsed["items"][0]["volumeInfo"]["title"],
@@ -29,15 +29,6 @@ module GoogleBooksApi
           }
         end
       end
-    end
-
-    def self.consultaTexto(texto)
-      url = "#{self.base_url}?q=#{texto.split(/\W+/).join("+")}"
-
-      response = self.request = RestClient.get url 
-
-      response.code == 200
-        parsed = JSON.parse(response)
     end
   end
 end
