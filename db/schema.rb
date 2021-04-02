@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_190219) do
   create_table "book_copies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "book_id", null: false
     t.string "user_description"
-    t.boolean "new_copy"
+    t.boolean "is_new"
     t.float "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

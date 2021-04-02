@@ -18,7 +18,7 @@ class BookCopiesController < ApplicationController
   def create
     book = search_or_create_book_by_isbn(book_copy_params["isbn"])
 
-    # The book must exists to persist a volume
+    # The book must exists to persist a copie
     if book.save
       new_book_copy = book_copy_params.except(:isbn)
       new_book_copy[:book] = book
@@ -59,6 +59,6 @@ class BookCopiesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def book_copy_params
-      params.require(:book_copy).permit(:isbn, :user_description, :new_copy, :price)
+      params.permit(:isbn, :user_description, :is_new, :price, :cover_image)
     end
 end

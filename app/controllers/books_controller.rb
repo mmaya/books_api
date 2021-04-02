@@ -1,18 +1,10 @@
 class BooksController < ApplicationController
   include BookIsbnSearch
 
-  before_action :set_book, only: [:show, :update, :destroy]
-  
-
   # GET /books
   def index
     @books = Book.all
     render json: @books
-  end
-
-  # GET /books/1
-  def show
-    render json: @book
   end
 
   # GET /isbn/856240988X
@@ -32,35 +24,13 @@ class BooksController < ApplicationController
     if @book.save
       render json: @book, status: :created, location: @book
     else
-      puts 'erro'
       render json: @book.errors, status: :unprocessable_entity
     end
-  end
-
-
-
-  # PATCH/PUT /books/1
-  def update
-    if @book.update(book_params)
-      render json: @book
-    else
-      render json: @book.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /books/1
-  def destroy
-    @book.destroy
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_book
-      @book = Book.find(book_params[:id])
-    end
-
     # Only allow a list of trusted parameters through.
     def book_params
-      params.permit(:book, :id, :isbn)
+      params.permit(:isbn)
     end
 end

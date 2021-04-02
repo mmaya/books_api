@@ -3,6 +3,8 @@ class BookCopy < ApplicationRecord
   has_one_attached :cover_image
   
   def as_json(options={})
-    super.merge({book.to_json})
+  super(
+    :except => [:created_at, :updated_at, :book_id]
+  ).merge(self.book.as_json, {cover_image_url: self.cover_image.url})
   end
 end
