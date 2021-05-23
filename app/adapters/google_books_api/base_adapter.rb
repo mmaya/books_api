@@ -29,11 +29,16 @@ module GoogleBooksApi
               authors: parsed["items"][0]["volumeInfo"]["authors"],
             }
           end
+        else
+          raise GoogleBooksApi::Error.new(response.code, "")
         end
+      rescue RestClient::ExceptionWithResponse => e
+        raise GoogleBooksApi::Error.new(e.response.code, e)
       rescue StandardError => e
-        raise GoogleBooksApi::Error.new("Ooops, we don't have this book on our database and something went wrong with Google Books API, please try again later. #{e}")
+        raise GoogleBooksApi::Error.new("", e)
       end
     end
   end
 end
+  
   
