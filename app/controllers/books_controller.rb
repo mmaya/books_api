@@ -1,5 +1,6 @@
 class BooksController < ApplicationController
   include BookIsbnSearch
+  before_action :set_isbn, only: [:create, :update, :showByIsbn]
 
   # GET /books
   def index
@@ -32,5 +33,11 @@ class BooksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def book_params
       params.permit(:isbn)
+    end
+
+    # Use callbacks to share common setup or constraints between actions.
+    def set_isbn
+      @isbn = Isbn.new(number: book_params["isbn"])
+      if @isbn.invalid? then render json: @isbn.errors, status: :unprocessable_entity end
     end
 end

@@ -1,8 +1,7 @@
 class Book < ApplicationRecord
-  require 'open-uri'
   has_many :book_copies
-
-  validates :title, :isbn, :authors, presence: true
+  validates :isbn,   isbn_format: true
+  validates :title, :isbn, :authors, presence: {message: "Ooops, we don't have this book on our database and couldn't find either the complete book information with this ISBN on Google Books API" }
 
   def as_json(options={})
     super(

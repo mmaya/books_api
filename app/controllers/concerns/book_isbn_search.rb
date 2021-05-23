@@ -6,7 +6,7 @@
       if !@book
         gbooks_data = GbooksIsbnService.new(isbn).execute
         @book = Book.create(gbooks_data)
-      end 
-      return @book
+      end
+      @book 
     end
   end
