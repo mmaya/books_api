@@ -35,7 +35,7 @@ class BooksController < ApplicationController
       params.permit(:isbn)
     end
 
-    # Use callbacks to share common setup or constraints between actions.
+    # Validates the given ISBN number before doing anything. 
     def set_isbn
       @isbn = Isbn.new(number: book_params["isbn"])
       if @isbn.invalid? then render json: @isbn.errors, status: :unprocessable_entity end

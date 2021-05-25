@@ -1,4 +1,4 @@
-# Handles third-party API business errors
+# Handles third-party API errors
 module GoogleBooksApi
   class Error < ApiException
     def initialize(status, error)

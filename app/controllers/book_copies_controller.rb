@@ -17,9 +17,11 @@ class BookCopiesController < ApplicationController
 
   # POST /book_copies
   def create
+    # The book must exists to persist a copy of it.
     book = search_or_create_book_by_isbn(@isbn.number)
     
-    # The book must exists to persist a copy of it
+    # It's not a transaction because my strategy is to have as many books as possible in my database
+    # So, I want to persist the book, even if something goes wrong persisting the book copy.
     if book.save
       new_book_copy = book_copy_params.except(:isbn)
       new_book_copy[:book] = book

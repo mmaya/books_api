@@ -1,3 +1,6 @@
+# This module is responsible for request the book information to Google Books API, 
+# parse the response, and handle Google Books API errors.
+# This is the focal point to address all API changes (Adapter design pattern)
 module GoogleBooksApi
   require 'rest_client'
   class BaseAdapter
