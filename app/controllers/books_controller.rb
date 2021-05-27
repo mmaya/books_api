@@ -1,5 +1,4 @@
 class BooksController < ApplicationController
-  include BookIsbnSearch
   before_action :set_isbn, only: [:create, :update, :showByIsbn]
 
   # GET /books
@@ -21,7 +20,7 @@ class BooksController < ApplicationController
 
   # POST /books
   def create
-    @book = search_or_create_book_by_isbn(book_params["isbn"])
+    @book = @isbn.search_or_create_book_by_isbn
     if @book.save
       render json: @book, status: :created, location: @book
     else

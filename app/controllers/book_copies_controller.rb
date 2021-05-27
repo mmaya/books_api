@@ -1,6 +1,4 @@
 class BookCopiesController < ApplicationController
-  include BookIsbnSearch
-  before_action :set_book_copy, only: [:show, :update, :destroy]
   before_action :set_isbn, only: [:create, :update]
 
   # GET /book_copies
@@ -10,21 +8,15 @@ class BookCopiesController < ApplicationController
     render json: @book_copy
   end
 
-  # GET /book_copies/1
-  def show
-    render json: @book_copy
-  end
-
   # POST /book_copies
   def create
-    # The book must exists to persist a copy of it.
-    book = search_or_create_book_by_isbn(@isbn.number)
-    
+    # The book must exists to persist a copy of it.  
     # It's not a transaction because my strategy is to have as many books as possible in my database
-    # So, I want to persist the book, even if something goes wrong persisting the book copy.
-    if book.save
+    # So, I want to persist the book, even if something goes wrong persisting the book copy.  
+    if @book
+      puts @book
       new_book_copy = book_copy_params.except(:isbn)
-      new_book_copy[:book] = book
+      new_book_copy[:book] = @book
 
       @book_copy = BookCopy.create(new_book_copy)
       
@@ -38,36 +30,22 @@ class BookCopiesController < ApplicationController
     end
   end
 
-
-
-  # PATCH/PUT /books/1
-  def update
-    if @book_copy.update(book_copy_params)
-      render json: @book_copy
-    else
-      render json: @book_copy.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /books/1
-  def destroy
-    @book_copy.destroy
-  end
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_book
-      @book_copy = BookCopy.find(params[:id])
-    end
-
     # Only allow a list of trusted parameters through.
     def book_copy_params
       params.permit(:isbn, :user_description, :is_new, :price, :cover_image)
     end
 
-    # Use callbacks to share common setup or constraints between actions.
+    # Validates the given ISBN number before doing anything. 
     def set_isbn
       @isbn = Isbn.new(number: book_copy_params["isbn"])
-      if @isbn.invalid? then render json: @isbn.errors, status: :unprocessable_entity end
+      if @isbn.valid? 
+        @book = @isbn.search_or_create_book_by_isbn
+        if !@book.save
+          render json: @book.errors, status: :unprocessable_entity 
+        end
+      else 
+        render json: @isbn.errors, status: :unprocessable_entity 
+      end
     end
 end
